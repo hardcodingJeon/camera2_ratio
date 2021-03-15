@@ -189,6 +189,8 @@ public class MainActivity extends AppCompatActivity {
             getWindowManager().getDefaultDisplay().getSize(displaySize);
             int rotatedPreviewWidth = width;
             int rotatedPreviewHeight = height;
+
+            /* 디스플레이 사이즈 */
             int maxPreviewWidth = displaySize.x;
             int maxPreviewHeight = displaySize.y;
 
@@ -205,6 +207,8 @@ public class MainActivity extends AppCompatActivity {
                 mTextureView.setAspectRatio(
                         mPreviewSize.getHeight(), mPreviewSize.getWidth());
             }
+
+
 
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
