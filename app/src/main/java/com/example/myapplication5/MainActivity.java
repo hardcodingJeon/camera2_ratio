@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
                     // cameraManager생성하는 메소드
+                    // width, height은 액션바를 제외한 디스플레이 크기
                     openCamera(width, height);
                 }
 
