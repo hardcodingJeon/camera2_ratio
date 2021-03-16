@@ -58,9 +58,15 @@ public class AutoFitTextureView extends TextureView {
         }
         mRatioWidth = width;
         mRatioHeight = height;
+        Log.e("mRatio",width+", "+height);
         requestLayout();
     }
 
+
+    /**AutoFitTextureView클래스(TextureView를 상속 받음)의 오버라이드 메소드 onMeasure()에서 setMeasuredDimension()메소드로TextureView의 view가로,세로 크기가 정해짐
+     이 TextureView의 크기로 확대 되어 보일수도 있고 미리보기화면이 왜곡이 일어날수도 있다. 디바이스 디스플레이 화면 가로 세로 보다 TextureView의 가로 세로 크기가
+     더 크면 확대되보이는 형태가 생길것이고 가로,세로 비율이 적절하지 않으면 왜곡이 일어나 보일 수 있다.
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -78,19 +84,20 @@ public class AutoFitTextureView extends TextureView {
 
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
+        /*width, height은 액션바를 제외한 디스플레이 크기*/
 
         Log.e("onMeasure width, height",width+", "+height);
         Log.e("onMeasure Ra",mRatioWidth+", "+mRatioHeight);
         if (0 == mRatioWidth || 0 == mRatioHeight) {
             setMeasuredDimension(width, height);
         } else {
-            if (width < height * mRatioWidth / mRatioHeight) {
+            if (width <= height * mRatioWidth / mRatioHeight) {
 //                setMeasuredDimension(height * mRatioWidth / mRatioHeight, height);
-                setMeasuredDimension(1715,2300);
+                setMeasuredDimension(height * 70 / 100, height);    /*원래 mRatioWidth / mRatioHeight 처럼 비율을 지정했는데 나는 정적으로 70 / 100으로 숫자로 지정함.    1:1.42 비율*/
                 Log.e("확인1",height * mRatioWidth / mRatioHeight+", "+height);
             } else {
-                setMeasuredDimension(width, width * mRatioHeight / mRatioWidth);
-//                setMeasuredDimension(960,720);
+//                setMeasuredDimension(width, width * mRatioHeight / mRatioWidth);
+                setMeasuredDimension(width, width * 70 / 100);
                 Log.e("확인2",width+", "+width * mRatioHeight / mRatioWidth);
             }
 

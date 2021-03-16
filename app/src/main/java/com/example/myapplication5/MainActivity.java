@@ -39,6 +39,18 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    
+    /**
+     Log값 예시
+     rotatedPreviewWidth : 1080
+     rotatedPreviewHeight : 1895
+     maxPreviewWidth : 1080
+     maxPreviewHeight : 2042
+     mPreviewSize : 960, 720
+     onMeasure width, height: 1080, 1895
+     onMeasure Ra: 720, 960
+     확인1 : 1421, 1895
+     */
 
     private AutoFitTextureView mTextureView;
     private CameraDevice cameraDevice;
@@ -181,8 +193,8 @@ public class MainActivity extends AppCompatActivity {
 
             // StreamConfigurationMap 객체에는 카메라의 각종 지원 정보가 담겨있다.
             map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
-            Size largest = Collections.max(
-                    Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
+            Size largest = Collections.max( /*map.getOutputSizes() 배열중 가장 큰 값을 largest 변수에 대입한다.*/
+                    Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),    /*map.getOutputSizes(ImageFormat.JPEG)는 JPEG들의 지원되는 사이즈 인가?*/
                     new CompareSizesByArea());
 
             /*todo*/
@@ -193,30 +205,32 @@ public class MainActivity extends AppCompatActivity {
             int rotatedPreviewWidth = width;    /*액션바를 제외한 화면 크기*/
             int rotatedPreviewHeight = height;
 
-            /*todo*/
-            Log.e("rotatedPreviewWidth",width+"");
-            Log.e("rotatedPreviewHeight",height+"");
+            /*todo
+            * 액션바 제외한 디바이스 화면 크기 */
+            Log.e("rotatedPreviewWidth",rotatedPreviewWidth+"");
+            Log.e("rotatedPreviewHeight",rotatedPreviewHeight+"");
 
             /* 디스플레이 사이즈 */
             int maxPreviewWidth = displaySize.x;
             int maxPreviewHeight = displaySize.y;
 
-            /*todo*/
+            /*todo
+            *  액션바 포함한 디바이스 화면 크기*/
             Log.e("maxPreviewWidth",maxPreviewWidth+"");
             Log.e("maxPreviewHeight",maxPreviewHeight+"");
 
             mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
                     rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth,
                     maxPreviewHeight, largest);
+            /*mPreViewSize.getWidth()와 mPreviewSize.getHeight()은 계속 960, 720으로 고정값이였다. chooseOptimalSize()로 리턴받는대도 값이 계속 똑같았다. 왜지?*/
 
             Log.e("mPreviewSize",mPreviewSize.getWidth()+", "+mPreviewSize.getHeight());
 
             /*todo*/
             int num = 0;
-            for (Size e : map.getOutputSizes(SurfaceTexture.class)) {
+            for (Size e : map.getOutputSizes(SurfaceTexture.class)) {   /*이건 SurfaceTexture(프리뷰)지원 되는 비율인가?*/
                 ++num;
                 Log.e("map size 배열 "+num,e.getWidth()+", "+e.getHeight());
-
             }
 
 
@@ -224,10 +238,10 @@ public class MainActivity extends AppCompatActivity {
             int orientation = getResources().getConfiguration().orientation;
             if(orientation == Configuration.ORIENTATION_LANDSCAPE){
                 mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
-//                mTextureView.setAspectRatio(4000, 3000);
+                /*원래는 .setAspectRatio()에 mPreviewSize의 가로세로 값을 넣어 이 가로세로 값으로 비율을 지정하여 AutoFitTextureView의 가로세로 값을 지정했는데
+                * 나는 가로 세로 1:1.42 비율(7:10)을 정적으로 지정하였다. AutoFitTextureView 클래스에 가면 있다.*/
             }else{
                 mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
-//                mTextureView.setAspectRatio(3000, 4000);
             }
 
 
@@ -259,7 +273,12 @@ public class MainActivity extends AppCompatActivity {
         List<Size> notBigEnough = new ArrayList<>();
         int w = aspectRatio.getWidth();
         int h = aspectRatio.getHeight();
-        for (Size option : choices) {
+        Log.e("aspectRatio.getWidth()",w+"");
+        Log.e("aspectRatio.getHeight()",h+"");
+        for (Size e : choices) {
+            Log.e("choices",e.getWidth()+", "+e.getHeight());
+        }
+        for (Size option : choices) {   /*option은 surfaceTexture지원 가능한 비율들, maxWidth와 maxHeight은 액션바 포함한 디바이스최대크기*/
             if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight &&
                     option.getHeight() == option.getWidth() * h / w) {
                 if (option.getWidth() >= textureViewWidth &&
