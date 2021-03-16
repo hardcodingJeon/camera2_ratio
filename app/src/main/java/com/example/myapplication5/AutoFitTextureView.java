@@ -18,6 +18,7 @@ package com.example.myapplication5;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.TextureView;
 
 /**
@@ -77,14 +78,22 @@ public class AutoFitTextureView extends TextureView {
 
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
+
+        Log.e("onMeasure width, height",width+", "+height);
+        Log.e("onMeasure Ra",mRatioWidth+", "+mRatioHeight);
         if (0 == mRatioWidth || 0 == mRatioHeight) {
             setMeasuredDimension(width, height);
         } else {
             if (width < height * mRatioWidth / mRatioHeight) {
-                setMeasuredDimension(height * mRatioWidth / mRatioHeight, height);
+//                setMeasuredDimension(height * mRatioWidth / mRatioHeight, height);
+                setMeasuredDimension(1715,2300);
+                Log.e("확인1",height * mRatioWidth / mRatioHeight+", "+height);
             } else {
                 setMeasuredDimension(width, width * mRatioHeight / mRatioWidth);
+//                setMeasuredDimension(960,720);
+                Log.e("확인2",width+", "+width * mRatioHeight / mRatioWidth);
             }
+
         }
     }
 

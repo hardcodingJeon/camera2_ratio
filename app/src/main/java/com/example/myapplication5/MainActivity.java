@@ -185,27 +185,49 @@ public class MainActivity extends AppCompatActivity {
                     Arrays.asList(map.getOutputSizes(ImageFormat.JPEG)),
                     new CompareSizesByArea());
 
+            /*todo*/
+            Log.e("largest",largest+"");
+
             Point displaySize = new Point();
             getWindowManager().getDefaultDisplay().getSize(displaySize);
-            int rotatedPreviewWidth = width;
+            int rotatedPreviewWidth = width;    /*액션바를 제외한 화면 크기*/
             int rotatedPreviewHeight = height;
+
+            /*todo*/
+            Log.e("rotatedPreviewWidth",width+"");
+            Log.e("rotatedPreviewHeight",height+"");
 
             /* 디스플레이 사이즈 */
             int maxPreviewWidth = displaySize.x;
             int maxPreviewHeight = displaySize.y;
 
+            /*todo*/
+            Log.e("maxPreviewWidth",maxPreviewWidth+"");
+            Log.e("maxPreviewHeight",maxPreviewHeight+"");
+
             mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
                     rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth,
                     maxPreviewHeight, largest);
+
+            Log.e("mPreviewSize",mPreviewSize.getWidth()+", "+mPreviewSize.getHeight());
+
+            /*todo*/
+            int num = 0;
+            for (Size e : map.getOutputSizes(SurfaceTexture.class)) {
+                ++num;
+                Log.e("map size 배열 "+num,e.getWidth()+", "+e.getHeight());
+
+            }
 
 
             // 화면 방향에 따라 뷰를 그릴때, 가로 세로의 크기를 정한다.
             int orientation = getResources().getConfiguration().orientation;
             if(orientation == Configuration.ORIENTATION_LANDSCAPE){
                 mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+//                mTextureView.setAspectRatio(4000, 3000);
             }else{
-                mTextureView.setAspectRatio(
-                        mPreviewSize.getHeight(), mPreviewSize.getWidth());
+                mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
+//                mTextureView.setAspectRatio(3000, 4000);
             }
 
 
