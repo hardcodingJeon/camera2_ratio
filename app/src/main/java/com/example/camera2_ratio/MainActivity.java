@@ -1,4 +1,4 @@
-package com.example.myapplication5;
+package com.example.camera2_ratio;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
 
             Point displaySize = new Point();
             getWindowManager().getDefaultDisplay().getSize(displaySize);
-            int rotatedPreviewWidth = width;    /*액션바를 제외한 화면 크기*/
+            int rotatedPreviewWidth = width;    /*액션바를 제외한 화면 크기, TextureView width,height*/
             int rotatedPreviewHeight = height;
 
             /*todo
@@ -238,11 +238,13 @@ public class MainActivity extends AppCompatActivity {
             // 화면 방향에 따라 뷰를 그릴때, 가로 세로의 크기를 정한다.
             int orientation = getResources().getConfiguration().orientation;
             if(orientation == Configuration.ORIENTATION_LANDSCAPE){
-                mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+//                mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+                mTextureView.setAspectRatio(maxPreviewHeight,maxPreviewWidth);
                 /*원래는 .setAspectRatio()에 mPreviewSize의 가로세로 값을 넣어 이 가로세로 값으로 비율을 지정하여 AutoFitTextureView의 가로세로 값을 지정했는데
                 * 나는 가로 세로 1:1.42 비율(7:10)을 정적으로 지정하였다. AutoFitTextureView 클래스에 가면 있다.*/
             }else{
-                mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
+//                mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
+                mTextureView.setAspectRatio(maxPreviewWidth,maxPreviewHeight);
             }
 
 
@@ -268,6 +270,14 @@ public class MainActivity extends AppCompatActivity {
     private static Size chooseOptimalSize(Size[] choices, int textureViewWidth,
                                           int textureViewHeight, int maxWidth, int maxHeight, Size aspectRatio) {
 
+        /**
+         map.getOutputSizes(SurfaceTexture.class) > choices
+         rotatedPreviewWidth > textureViewWidth
+         rotatedPreviewHeight > textureViewHeight
+         maxPreviewWidth > maxWidth
+         maxPreviewHeight > maxHeight
+         largest > aspectRatio  , largest는 JPGE를 지원하는 크기들인가?
+         */
         // Collect the supported resolutions that are at least as big as the preview Surface
         List<Size> bigEnough = new ArrayList<>();
         // Collect the supported resolutions that are smaller than the preview Surface
@@ -276,8 +286,10 @@ public class MainActivity extends AppCompatActivity {
         int h = aspectRatio.getHeight();
         Log.e("aspectRatio.getWidth()",w+"");
         Log.e("aspectRatio.getHeight()",h+"");
+        int num = 0;
         for (Size e : choices) {
-            Log.e("choices",e.getWidth()+", "+e.getHeight());
+            num++;
+            Log.e("choices "+(num),e.getWidth()+", "+e.getHeight());
         }
         for (Size option : choices) {   /*option은 surfaceTexture지원 가능한 비율들, maxWidth와 maxHeight은 액션바 포함한 디바이스최대크기*/
             if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight &&

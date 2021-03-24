@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.myapplication5;
+package com.example.camera2_ratio;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -70,8 +70,20 @@ public class AutoFitTextureView extends TextureView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//        int width = MeasureSpec.getSize(widthMeasureSpec);
-//        int height = MeasureSpec.getSize(heightMeasureSpec);
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+
+
+        if (0 == mRatioWidth || 0 == mRatioHeight) {
+            setMeasuredDimension(width, height);
+        } else {
+            if (width < height) {
+                setMeasuredDimension(width * (height/width),  height);
+            } else {
+                setMeasuredDimension(height, width);
+            }
+        }
+
 //        if (0 == mRatioWidth || 0 == mRatioHeight) {
 //            setMeasuredDimension(width, height);
 //        } else {
@@ -82,26 +94,24 @@ public class AutoFitTextureView extends TextureView {
 //            }
 //        }
 
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = MeasureSpec.getSize(heightMeasureSpec);
         /*width, height은 액션바를 제외한 디스플레이 크기*/
 
         Log.e("onMeasure width, height",width+", "+height);
         Log.e("onMeasure Ra",mRatioWidth+", "+mRatioHeight);
-        if (0 == mRatioWidth || 0 == mRatioHeight) {
-            setMeasuredDimension(width, height);
-        } else {
-            if (width <= height * mRatioWidth / mRatioHeight) {
-//                setMeasuredDimension(height * mRatioWidth / mRatioHeight, height);
-                setMeasuredDimension(height * 70 / 100, height);    /*원래 mRatioWidth / mRatioHeight 처럼 비율을 지정했는데 나는 정적으로 70 / 100으로 숫자로 지정함.    1:1.42 비율*/
-                Log.e("확인1",height * mRatioWidth / mRatioHeight+", "+height);
-            } else {
-//                setMeasuredDimension(width, width * mRatioHeight / mRatioWidth);
-                setMeasuredDimension(width, width * 70 / 100);
-                Log.e("확인2",width+", "+width * mRatioHeight / mRatioWidth);
-            }
-
-        }
+//        if (0 == mRatioWidth || 0 == mRatioHeight) {
+//            setMeasuredDimension(width, height);
+//        } else {
+//            if (width <= height * mRatioWidth / mRatioHeight) {
+////                setMeasuredDimension(height * mRatioWidth / mRatioHeight, height);
+//                setMeasuredDimension(height * 70 / 100, height);    /*원래 mRatioWidth / mRatioHeight 처럼 비율을 지정했는데 나는 정적으로 70 / 100으로 숫자로 지정함.    1:1.42 비율*/
+//                Log.e("확인1",height * mRatioWidth / mRatioHeight+", "+height);
+//            } else {
+////                setMeasuredDimension(width, width * mRatioHeight / mRatioWidth);
+//                setMeasuredDimension(width, width * 70 / 100);
+//                Log.e("확인2",width+", "+width * mRatioHeight / mRatioWidth);
+//            }
+//
+//        }
     }
 
 }

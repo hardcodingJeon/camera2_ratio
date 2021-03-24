@@ -1,4 +1,4 @@
-package com.example.myapplication5;
+package com.example.camera2_ratio;
 
 import android.content.Context;
 
